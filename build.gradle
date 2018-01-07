@@ -1,3 +1,14 @@
+// Gradle plugin for Kotlin development
+buildscript {
+    ext.kotlin_version = "1.2.10"
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
 plugins {
     id "java"
     id "eclipse"
@@ -23,12 +34,19 @@ deploy {
     }
 }
 
+// Central is required to fetch Kotlin
+repositories {
+    mavenCentral()
+}
+
 // Defining my dependencies. In this case, WPILib (+ friends), CTRE Toolsuite (Talon SRX)
 // and NavX.
 dependencies {
     compile wpilib()
     compile ctre()
     compile navx()
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

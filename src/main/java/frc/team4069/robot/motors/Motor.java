@@ -5,7 +5,7 @@ import java.util.Date;
 // A simple motor wrapper that defines common APIs for motors
 // Implementation-specific internal APIs are implemented by subclasses
 // This class should contain higher-level APIs that work regardless of the specific type of motor
-abstract class Motor {
+public abstract class Motor {
 
     // An instance of the motor state enum
     private MotorState state = MotorState.CONSTANT_SPEED;
