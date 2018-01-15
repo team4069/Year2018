@@ -82,6 +82,9 @@ public abstract class Motor {
         setSpeedUnsafe(speedWithReverse);
     }
 
+    // Set the position of the motor in rotations using PID for positional control
+    abstract void setPosition(double position);
+
     // Set the speed of the motor without any checks or processing
     // Called in the setConstantSpeed function and must be overridden by subclasses
     abstract void setSpeedUnsafe(double speed);

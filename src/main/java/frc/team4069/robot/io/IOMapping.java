@@ -3,6 +3,8 @@ package frc.team4069.robot.io;
 // A class containing static constants that contain the port numbers for connected devices
 public class IOMapping {
 
+    // CAN bus port for the climber hook motor
+    public static final int CLIMBER_HOOK_CAN_BUS = 1;
     // PWM ports for the left and right drive motors
     public static final int LEFT_DRIVE_PWM = 8;
     public static final int RIGHT_DRIVE_PWM = 9;

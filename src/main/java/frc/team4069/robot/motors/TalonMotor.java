@@ -49,6 +49,10 @@ public class TalonMotor extends Motor {
         talon.set(speed);
     }
 
+    // Set the position of the motor using PID for positional control
+    public void setPosition(double position) {
+    }
+
     // Get the distance traveled so far in rotations
     public double getDistanceTraveledMeters() {
         // Get the distance traveled directly from the Talon unless the encoder has not been set
