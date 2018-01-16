@@ -38,11 +38,6 @@ public class TalonMotor extends Motor {
         talon = new Talon(motorPortNumber);
     }
 
-    // Accessor for the currently commanded speed of the Talon
-    public double getSpeed() {
-        return talon.get();
-    }
-
     // Set the speed of the motor without any safety checks
     public void setSpeedUnsafe(double speed) {
         // Set the speed of the Talon directly
@@ -50,11 +45,12 @@ public class TalonMotor extends Motor {
     }
 
     // Set the position of the motor using PID for positional control
-    public void setPosition(double position) {
+    public void rotateToPositionRotations(double position) {
+        // TODO
     }
 
     // Get the distance traveled so far in rotations
-    public double getDistanceTraveledMeters() {
+    public double getDistanceTraveledRotations() {
         // Get the distance traveled directly from the Talon unless the encoder has not been set
         // In that case, simply return zero
         return encoder == null ? 0 : encoder.getDistance();

@@ -55,9 +55,6 @@ public abstract class Motor {
         }
     }
 
-    // Get the current speed of the motor
-    public abstract double getSpeed();
-
     // Set the speed of the motor, as a number from -1 to 1
     public final void setConstantSpeed(double speed) {
         // Reset the distance traveled, as this is a new operation
@@ -83,7 +80,7 @@ public abstract class Motor {
     }
 
     // Set the position of the motor in rotations using PID for positional control
-    abstract void setPosition(double position);
+    public abstract void rotateToPositionRotations(double position);
 
     // Set the speed of the motor without any checks or processing
     // Called in the setConstantSpeed function and must be overridden by subclasses
@@ -96,7 +93,7 @@ public abstract class Motor {
     }
 
     // Get the distance traveled so far in meters
-    public abstract double getDistanceTraveledMeters();
+    public abstract double getDistanceTraveledRotations();
 
     // Reset the distance traveled
     public abstract void resetDistanceTraveled();

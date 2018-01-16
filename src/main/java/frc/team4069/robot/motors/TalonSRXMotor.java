@@ -9,25 +9,15 @@ public class TalonSRXMotor extends Motor {
     // The number of encoder ticks per motor rotation
     private final int encoderTicksPerRotation = 4096;
 
-    // The number of motor rotations per meter of wheel travel
-    private double motorRotations;
-
     // An instance of the TalonSRX motor API
     private TalonSRX talon;
 
     // Create a new instance with a provided port number
-    public TalonSRXMotor(int portNumber, boolean reversed, double motorRotationsPerMeter) {
+    public TalonSRXMotor(int portNumber, boolean reversed) {
         // Call the superclass constructor using the reversed flag
         super(reversed);
         // Create a CANTalon using the provided port number
         talon = new TalonSRX(portNumber);
-        // Set the number of motor rotations per meter
-        motorRotations = motorRotationsPerMeter;
-    }
-
-    // Accessor for the currently commanded speed of the CANTalon
-    public double getSpeed() {
-        return talon.getOutputCurrent();
     }
 
     // Set the speed of the motor without any checks or processing
@@ -36,18 +26,20 @@ public class TalonSRXMotor extends Motor {
         talon.set(ControlMode.Current, speed);
     }
 
-    // Set the position of the motor using PID for positional control
-    public void setPosition(double position) {
-        talon.set(ControlMode.Position, position);
+    // Set the position of the motor in rotations, using PID for positional control
+    public void rotateToPositionRotations(double position) {
+        // Multiply the position by the number of encoder ticks per rotation
+        double positionEncoderTicks = position * (double) encoderTicksPerRotation;
+        // Set the control mode and the calculated position
+        talon.set(ControlMode.Position, positionEncoderTicks);
     }
 
-    // Get the distance traveled so far in meters
-    public double getDistanceTraveledMeters() {
+    // Get the distance traveled so far in rotations
+    public double getDistanceTraveledRotations() {
         // Get the value from the sensor collection
         int quadPosition = talon.getSensorCollection().getQuadraturePosition();
         // Divide it by the number of ticks per rotation to get the number of rotations
-        double numRotations = (double) quadPosition / (double) encoderTicksPerRotation;
-        return 0;
+        return (double) quadPosition / (double) encoderTicksPerRotation;
     }
 
     // Reset the distance traveled

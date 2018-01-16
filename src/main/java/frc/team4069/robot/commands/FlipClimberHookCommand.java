@@ -4,14 +4,15 @@ package frc.team4069.robot.commands;
 public class FlipClimberHookCommand extends CommandBase {
 
     // Constructor, used to claim subsystems
-    FlipClimberHookCommand() {
+    public FlipClimberHookCommand() {
         // Claim exclusive use of the drive base
         requires(climberHook);
     }
 
     // Initializer in which to set the motor speed
     protected void initialize() {
-        // Set the motor's position to
+        // Rotate the motor to one half of a rotation
+        climberHook.flipHook();
     }
 
     // Called to check whether this command has completed

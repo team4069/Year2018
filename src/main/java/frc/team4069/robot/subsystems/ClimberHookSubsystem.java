@@ -15,7 +15,7 @@ public class ClimberHookSubsystem extends SubsystemBase {
     // Initialize the motor
     private ClimberHookSubsystem() {
         // Use the predefined port number
-        climberHookMotor = new TalonSRXMotor(IOMapping.CLIMBER_HOOK_CAN_BUS, false, 10);
+        climberHookMotor = new TalonSRXMotor(IOMapping.CLIMBER_HOOK_CAN_BUS, false);
     }
 
     // A public getter for the instance
@@ -28,8 +28,9 @@ public class ClimberHookSubsystem extends SubsystemBase {
         return instance;
     }
 
-    // Set the position of the motor
-    public void setPosition(double position) {
-        climberHookMotor.setPosition(position);
+    // Flip the hook 180 degrees
+    public void flipHook() {
+        // Rotate the motor to one half of a rotation
+        climberHookMotor.rotateToPositionRotations(0.5);
     }
 }
