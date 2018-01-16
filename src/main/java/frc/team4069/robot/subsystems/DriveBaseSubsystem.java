@@ -78,7 +78,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // Start driving with given parameters
     public void drive(double ySpeed, double xSpeed, double zRotation) {
         // Call the Mecanum drive class directly
-        mecanumDrive.set(DriveMode.PercentOutput, ySpeed, zRotation, xSpeed);
+        mecanumDrive.set(DriveMode.Voltage, ySpeed, zRotation, xSpeed);
     }
 
     // Stop moving immediately
