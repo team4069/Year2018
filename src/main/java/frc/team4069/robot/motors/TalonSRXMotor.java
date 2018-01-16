@@ -1,6 +1,7 @@
 package frc.team4069.robot.motors;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 // The CANTalon-specific implementation of Motor
@@ -18,12 +19,21 @@ public class TalonSRXMotor extends Motor {
         super(reversed);
         // Create a CANTalon using the provided port number
         talon = new TalonSRX(portNumber);
+        // Set the encoder
+        talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+        // Configure the proportional value
+        talon.config_kP(0, 1.0, 0);
+        /* lets grab the 360 degree position of the MagEncoder's absolute position */
+        int absolutePosition = talon.getSelectedSensorPosition(0)
+                & 0xFFF; /* mask out the bottom12 bits, we don't care about the wrap arounds */
+        /* use the low level API to set the quad encoder signal */
+        talon.setSelectedSensorPosition(absolutePosition, 0, 0);
     }
 
     // Set the speed of the motor without any checks or processing
     public void setSpeedUnsafe(double speed) {
         // Set the speed of the CANTalon directly
-        talon.set(ControlMode.Current, speed);
+        talon.set(ControlMode.PercentOutput, speed);
     }
 
     // Set the position of the motor in rotations, using PID for positional control
