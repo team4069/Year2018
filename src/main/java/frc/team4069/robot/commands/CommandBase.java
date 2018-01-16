@@ -17,10 +17,4 @@ public abstract class CommandBase extends Command {
         driveBase = DriveBaseSubsystem.getInstance();
         climberHook = ClimberHookSubsystem.getInstance();
     }
-
-    // A function called periodically to updateSubsystems all subsystems
-    public static void updateSubsystems() {
-        // Update each of the subsystems that need updating
-        driveBase.update();
-    }
 }
