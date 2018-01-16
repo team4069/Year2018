@@ -1,5 +1,6 @@
 package frc.team4069.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
 
@@ -15,7 +16,7 @@ public class ClimberHookSubsystem extends SubsystemBase {
     // Initialize the motor
     private ClimberHookSubsystem() {
         // Use the predefined port number
-        climberHookMotor = new TalonSRXMotor(IOMapping.CLIMBER_HOOK_CAN_BUS, false);
+        climberHookMotor = new TalonSRXMotor(new TalonSRX(IOMapping.CLIMBER_HOOK_CAN_BUS), false);
     }
 
     // A public getter for the instance
