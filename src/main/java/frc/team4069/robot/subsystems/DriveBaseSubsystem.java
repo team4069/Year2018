@@ -31,10 +31,10 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // Initialize the drive motors
     private DriveBaseSubsystem() {
         // Initialize TalonSRX instances with predefined port numbers
-        TalonSRX leftFrontTalon = new TalonSRX(IOMapping.LEFT_FRONT_DRIVE_PWM);
-        TalonSRX leftRearTalon = new TalonSRX(IOMapping.LEFT_REAR_DRIVE_PWM);
-        TalonSRX rightFrontTalon = new TalonSRX(IOMapping.RIGHT_FRONT_DRIVE_PWM);
-        TalonSRX rightRearTalon = new TalonSRX(IOMapping.RIGHT_REAR_DRIVE_PWM);
+        TalonSRX leftFrontTalon = new TalonSRX(IOMapping.LEFT_FRONT_DRIVE_CAN_BUS);
+        TalonSRX leftRearTalon = new TalonSRX(IOMapping.LEFT_REAR_DRIVE_CAN_BUS);
+        TalonSRX rightFrontTalon = new TalonSRX(IOMapping.RIGHT_FRONT_DRIVE_CAN_BUS);
+        TalonSRX rightRearTalon = new TalonSRX(IOMapping.RIGHT_REAR_DRIVE_CAN_BUS);
 
         // Initialize the global motors with the TalonSRX instances
         leftFrontMotor = new TalonSRXMotor(leftFrontTalon, false);
