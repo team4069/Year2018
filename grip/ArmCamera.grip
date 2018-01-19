@@ -87,9 +87,9 @@
   </settings>
   <codeGenerationSettings>
     <language>Java</language>
-    <className>GripPipeline</className>
-    <implementWpilibPipeline>false</implementWpilibPipeline>
-    <saveDir>/Users/brendonm/GRIP</saveDir>
+    <className>ArmCameraPipeline</className>
+    <implementWpilibPipeline>true</implementWpilibPipeline>
+    <saveDir>/Users/brendonm/Desktop</saveDir>
     <packageName></packageName>
     <moduleName>grip</moduleName>
   </codeGenerationSettings>
