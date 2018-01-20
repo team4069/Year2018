@@ -4,7 +4,7 @@ package frc.team4069.robot.io;
 public class IOMapping {
 
     // CAN bus port for the climber hook motor
-    public static final int CLIMBER_HOOK_CAN_BUS = 1;
+    public static final int CLIMBER_HOOK_CAN_BUS = 6;
     // CAN bus ports for the drive motors
     public static final int LEFT_FRONT_DRIVE_CAN_BUS = 1;
     public static final int RIGHT_FRONT_DRIVE_CAN_BUS = 2;

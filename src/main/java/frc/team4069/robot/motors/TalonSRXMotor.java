@@ -20,14 +20,14 @@ public class TalonSRXMotor extends Motor {
         // Set the global reference to the Talon
         talon = talonSRX;
         // Set the encoder
-        talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+        talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
         // Configure the proportional value
-        talon.config_kP(0, 1.0, 0);
+        talon.config_kP(0, 1.0, 10);
         /* lets grab the 360 degree position of the MagEncoder's absolute position */
         int absolutePosition = talon.getSelectedSensorPosition(0)
                 & 0xFFF; /* mask out the bottom12 bits, we don't care about the wrap arounds */
         /* use the low level API to set the quad encoder signal */
-        talon.setSelectedSensorPosition(absolutePosition, 0, 0);
+        talon.setSelectedSensorPosition(absolutePosition, 0, 10);
     }
 
     // Set the speed of the motor without any checks or processing
@@ -55,6 +55,6 @@ public class TalonSRXMotor extends Motor {
     // Reset the distance traveled
     public void resetDistanceTraveled() {
         // Reset the encoder count to zero
-        talon.setSelectedSensorPosition(0, 0, 0);
+        talon.setSelectedSensorPosition(0, 0, 10);
     }
 }
