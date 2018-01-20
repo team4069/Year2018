@@ -1,5 +1,6 @@
 package frc.team4069.robot.vision;
 
+import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.vision.VisionThread;
@@ -8,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import org.opencv.core.Rect;
-import org.opencv.imgproc.Imgproc;
 
 // The static class that contains the vision threads and the data updated by them
 public class VisionData {
@@ -22,9 +21,8 @@ public class VisionData {
     public static int powerCubeYPos;
     // The average X position of the lines found in the captured image
     public static double averageLineX;
-    // Vision threads for both cameras
-    private static VisionThread armCameraVisionThread;
-    private static VisionThread frontCameraVisionThread;
+    // Output stream to smart dashboard
+    private static CvSource outputStream;
 
     // Set up the vision threads and set them to run as the camera captures frames
     public static void configureVision() {
@@ -32,32 +30,40 @@ public class VisionData {
         // Create the first and second cameras, which are located on the lifting arm and at the
         // front of the robot, respectively
         CameraServer server = CameraServer.getInstance();
-        UsbCamera armCamera = server.startAutomaticCapture(0);
-        armCamera.setResolution(320, 240);
-        UsbCamera frontCamera = server.startAutomaticCapture(1);
+//        UsbCamera armCamera = server.startAutomaticCapture(0);
+//        armCamera.setResolution(320, 240);
+//        UsbCamera frontCamera = server.startAutomaticCapture(1);
+        UsbCamera frontCamera = server.startAutomaticCapture(0);
         frontCamera.setResolution(320, 240);
 
-        // Initialize the arm camera thread and update the position of the power cube every frame
-        armCameraVisionThread = new VisionThread(armCamera, new ArmCameraPipeline(),
-                pipeline -> {
-                    // If an image is in the field
-                    if (!pipeline.findContoursOutput().isEmpty()) {
-                        // Get the maximum extents of the contours
-                        Rect contourBounds = Imgproc
-                                .boundingRect(pipeline.findContoursOutput().get(0));
-                        // Set the public values accordingly
-                        powerCubeXPos = contourBounds.x + (contourBounds.width / 2);
-                        powerCubeYPos = contourBounds.x + (contourBounds.height / 2);
-                    }
-                }
-        );
+//        // Initialize the arm camera thread and update the position of the power cube every frame
+//        VisionThread armCameraVisionThread = new VisionThread(armCamera,
+//                new ArmCameraPipeline(),
+//                pipeline -> {
+//                    // If an image is in the field
+//                    if (!pipeline.findContoursOutput().isEmpty()) {
+//                        // Get the maximum extents of the contours
+//                        Rect contourBounds = Imgproc
+//                                .boundingRect(pipeline.findContoursOutput().get(0));
+//                        // Set the public values accordingly
+//                        powerCubeXPos = contourBounds.x + (contourBounds.width / 2);
+//                        powerCubeYPos = contourBounds.x + (contourBounds.height / 2);
+//                    }
+//                }
+//        );
 
         // Initialize the front camera thread, updating the average position of the lines each frame
-        frontCameraVisionThread = new VisionThread(frontCamera, new TapeTrackingPipeline(),
+        VisionThread frontCameraVisionThread = new VisionThread(frontCamera,
+                new TapeTrackingPipeline(),
                 pipeline -> {
+                    // Get the output from the pipeline
                     ArrayList<Line> lines = pipeline.filterLinesOutput();
+                    System.out.println(lines.size());
                     // If there are at least four lines
-                    if (pipeline.filterLinesOutput().size() >= numLines) {
+                    if (lines.size() >= numLines) {
+                        System.out.println("numLines is over 4");
+                        // Display the blurred image on the smart dashboard
+                        outputStream.putFrame(pipeline.blurOutput());
                         // Sort the lines
                         Collections.sort(lines, new LineComparator());
                         // Get the first four elements of the list
@@ -74,7 +80,11 @@ public class VisionData {
         );
 
         // Run the threads
-        armCameraVisionThread.start();
+//        armCameraVisionThread.start();
+        frontCameraVisionThread.start();
+
+        // Set up the output stream to the smart dashboard
+        outputStream = CameraServer.getInstance().putVideo("ProcessorOutput", 640, 480);
     }
 
     // Comparator that allows comparing the lengths of Line objects

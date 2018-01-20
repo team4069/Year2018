@@ -8,7 +8,6 @@ import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.commands.FlipClimberHookCommand;
 import frc.team4069.robot.commands.OperatorControlCommandGroup;
 import frc.team4069.robot.io.Input;
-import frc.team4069.robot.vision.VisionData;
 
 public class Robot extends IterativeRobot {
 
@@ -23,7 +22,7 @@ public class Robot extends IterativeRobot {
         Input.init();
 
         // Configure the vision threads
-        VisionData.configureVision();
+//        VisionData.configureVision();
 
         // Data for which side of the switches and scales are ours is sent through FMS at the start of the match
         // Follows the pattern LRL, where arr[0] is your switch, arr[1] is the scale, and arr[2] is their switch
