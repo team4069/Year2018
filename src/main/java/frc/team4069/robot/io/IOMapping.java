@@ -6,10 +6,8 @@ public class IOMapping {
     // CAN bus port for the climber hook motor
     public static final int CLIMBER_HOOK_CAN_BUS = 6;
     // CAN bus ports for the drive motors
-    public static final int LEFT_FRONT_DRIVE_CAN_BUS = 1;
-    public static final int RIGHT_FRONT_DRIVE_CAN_BUS = 2;
-    public static final int LEFT_REAR_DRIVE_CAN_BUS = 3;
-    public static final int RIGHT_REAR_DRIVE_CAN_BUS = 4;
+    public static final int LEFT_DRIVE_CAN_BUS = 1;
+    public static final int RIGHT_DRIVE_CAN_BUS = 2;
 
     // The port number of the drive joystick
     static final int DRIVE_JOYSTICK_NUMBER = 0;

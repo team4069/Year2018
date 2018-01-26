@@ -1,8 +1,5 @@
 package frc.team4069.robot.subsystems;
 
-import com.ctre.phoenix.drive.DriveMode;
-import com.ctre.phoenix.drive.MecanumDrive;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
 
@@ -16,39 +13,18 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // A singleton instance of the drive base subsystem
     private static DriveBaseSubsystem instance;
 
-    // The number of meters each wheel travels per encoder rotation
-    private final double METERS_PER_ROTATION = 0.05;
+    // The number of meters each wheel travels per rotation
+    private final double METERS_PER_ROTATION = 0.2;
 
-    // References to the individual motors
-    private TalonSRXMotor leftFrontMotor;
-    private TalonSRXMotor leftRearMotor;
-    private TalonSRXMotor rightFrontMotor;
-    private TalonSRXMotor rightRearMotor;
-
-    // Class that provides Mecanum drive functionality
-    private MecanumDrive mecanumDrive;
+    // Left and right drive motors
+    private TalonSRXMotor leftDriveMotor;
+    private TalonSRXMotor rightDriveMotor;
 
     // Initialize the drive motors
     private DriveBaseSubsystem() {
-        // Initialize TalonSRX instances with predefined port numbers
-        TalonSRX leftFrontTalon = new TalonSRX(IOMapping.LEFT_FRONT_DRIVE_CAN_BUS);
-        TalonSRX leftRearTalon = new TalonSRX(IOMapping.LEFT_REAR_DRIVE_CAN_BUS);
-        TalonSRX rightFrontTalon = new TalonSRX(IOMapping.RIGHT_FRONT_DRIVE_CAN_BUS);
-        TalonSRX rightRearTalon = new TalonSRX(IOMapping.RIGHT_REAR_DRIVE_CAN_BUS);
-
-        // Initialize the global motors with the TalonSRX instances
-        leftFrontMotor = new TalonSRXMotor(leftFrontTalon, false);
-        leftRearMotor = new TalonSRXMotor(leftRearTalon, false);
-        rightFrontMotor = new TalonSRXMotor(rightFrontTalon, false);
-        rightRearMotor = new TalonSRXMotor(rightRearTalon, false);
-
-        // Create a Mecanum drive instance with the TalonSRX instances
-        mecanumDrive = new MecanumDrive(
-                leftFrontTalon,
-                leftRearTalon,
-                rightFrontTalon,
-                rightRearTalon
-        );
+        // Initialize the motors with predefined port numbers
+        leftDriveMotor = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, false);
+        rightDriveMotor = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, false);
     }
 
     // A public getter for the instance
@@ -61,29 +37,88 @@ public class DriveBaseSubsystem extends SubsystemBase {
         return instance;
     }
 
-    // Get the average absolute distance traveled by each of the wheels, in meters
+    // A public getter for the distance traveled in meters
     public double getDistanceTraveledMeters() {
-        // Get the distance traveled in rotations from each wheel
-        double leftFrontDistance = leftFrontMotor.getDistanceTraveledRotations();
-        double leftRearDistance = leftRearMotor.getDistanceTraveledRotations();
-        double rightFrontDistance = rightFrontMotor.getDistanceTraveledRotations();
-        double rightRearDistance = rightRearMotor.getDistanceTraveledRotations();
-        // Calculate the average of the 4 values
-        double averageDistance = (leftFrontDistance + leftRearDistance
-                + rightFrontDistance + rightRearDistance) / 4.0;
-        // Convert the value to meters and return it
-        return averageDistance * METERS_PER_ROTATION;
-    }
-
-    // Start driving with given parameters
-    public void drive(double ySpeed, double xSpeed, double zRotation) {
-        // Call the Mecanum drive class directly
-        mecanumDrive.set(DriveMode.Voltage, ySpeed, zRotation, xSpeed);
+        // Get the absolute values of the positions of each of the motors and calculate the average
+        double leftWheelRotationsTraveled =
+                Math.abs(leftDriveMotor.getDistanceTraveledRotations());
+        double rightWheelRotationsTraveled =
+                Math.abs(rightDriveMotor.getDistanceTraveledRotations());
+        double averageRotationsTraveled =
+                (leftWheelRotationsTraveled + rightWheelRotationsTraveled) / 2;
+        // Multiply the average rotations by the number of wheels per rotation to get the average
+        // distance traveled in meters
+        return averageRotationsTraveled * METERS_PER_ROTATION;
     }
 
     // Stop moving immediately
     public void stop() {
-        // Set the drive speeds to zero
-        drive(0, 0, 0);
+        // Set the motor speeds to zero
+        leftDriveMotor.stop();
+        rightDriveMotor.stop();
+    }
+
+    // Start driving with a given turning coefficient and speed from zero to one
+    public void driveContinuousSpeed(double turn, double speed) {
+        // Use the cheesy drive algorithm to calculate the necessary speeds
+        WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn, speed);
+
+        // Set the motor speeds with the calculated values
+        leftDriveMotor.setConstantSpeed(wheelSpeeds.leftWheelSpeed);
+        rightDriveMotor.setConstantSpeed(wheelSpeeds.rightWheelSpeed);
+    }
+
+    // A function that takes a turning coefficient from -1 to 1 and a speed and calculates the
+    // left and right wheel speeds using a generalized cheesy drive algorithm
+    // Credit to Team 254 for the original algorithm
+    private WheelSpeeds generalizedCheesyDrive(double turn, double speed) {
+        // First, a special case: if the speed is zero, turn on the spot
+        if (speed == 0) {
+            // Simply use the turn coefficient and its negative for the wheel speeds, since it is
+            // within the range of -1 and 1, and a sharper turn will result in faster rotation
+            return new WheelSpeeds(turn, -turn);
+        }
+        // Otherwise, we will use the standard algorithm
+        else {
+            // Apply a polynomial function to the speed and multiply it by the turning coefficient
+            // This adds a non-linearity so that turning is quicker at lower speeds
+            // This number will be half of the difference in speed between the two wheels
+            // Get the sign of the speed and use the absolute value because the polynomial may give
+            // imaginary numbers for negative speed values
+            double speedSign = speed > 0 ? 1 : -1;
+            // Use the absolute value in the polynomial calculation
+            // and multiply the result by the sign
+            double wheelSpeedDifference = speedPolynomial(Math.abs(speed)) * turn * speedSign;
+            // Add this difference to the overall speed to get the left wheel speed and subtract it
+            // from the overall speed to get the right wheel speed
+            return new WheelSpeeds(
+                    speed + wheelSpeedDifference,
+                    speed - wheelSpeedDifference
+            );
+        }
+    }
+
+    // The polynomial function applied to the speed during turn computation
+    private double speedPolynomial(double speed) {
+        // Use a simple square root function for the polynomial (an exponent of 0.5)
+        // This increases the weight of the difference between the wheel speeds at low speeds
+        // because the square root is relatively large in magnitude for values close to zero
+        // Multiply the result of the square root by 2 to increase the turning sensitivity
+        return Math.sqrt(speed) * 2;
+    }
+
+    // A wrapper class that contains a speed value for each of the drive base wheels
+    private class WheelSpeeds {
+
+        // Speeds for the left and right wheel
+        private double leftWheelSpeed;
+        private double rightWheelSpeed;
+
+        // Constructor that takes parameters for each of the wheel speeds
+        private WheelSpeeds(double leftWheelSpeed, double rightWheelSpeed) {
+            // Set the global variables
+            this.leftWheelSpeed = leftWheelSpeed;
+            this.rightWheelSpeed = rightWheelSpeed;
+        }
     }
 }

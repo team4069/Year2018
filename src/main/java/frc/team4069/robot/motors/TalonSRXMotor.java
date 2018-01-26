@@ -14,11 +14,11 @@ public class TalonSRXMotor extends Motor {
     private TalonSRX talon;
 
     // Create a new instance with a provided port number
-    public TalonSRXMotor(TalonSRX talonSRX, boolean reversed) {
+    public TalonSRXMotor(int portNumber, boolean reversed) {
         // Call the superclass constructor using the reversed flag
         super(reversed);
-        // Set the global reference to the Talon
-        talon = talonSRX;
+        // Create a TalonSRX instance using the provided port number
+        talon = new TalonSRX(portNumber);
         // Set the encoder
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
         // Configure the proportional value

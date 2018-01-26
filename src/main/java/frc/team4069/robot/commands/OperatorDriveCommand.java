@@ -50,7 +50,7 @@ class OperatorDriveCommand extends CommandBase {
                 // Get the sign of the angle in order to calculate the direction to turn the wheels
                 double turnDirection = Math.signum(quickTurnDistanceMeters);
                 // Start turning at full speed in the direction of the sign
-                driveBase.drive(0, 0, turnDirection);
+                driveBase.driveContinuousSpeed(turnDirection, 0);
             }
         }
 
@@ -72,7 +72,7 @@ class OperatorDriveCommand extends CommandBase {
             // Disable quick turn
             quickTurnDistanceMeters = 0;
             // Set the speed of the robot
-            driveBase.drive(speed, 0, turningCoefficient);
+            driveBase.driveContinuousSpeed(turningCoefficient, speed);
         }
     }
 
