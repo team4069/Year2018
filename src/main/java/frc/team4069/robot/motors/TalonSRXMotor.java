@@ -4,7 +4,13 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-// The CANTalon-specific implementation of Motor
+
+/**
+ * The CANTalon-specific implementation of Motor
+ *
+ * @deprecated Use {@link TalonMotor} instead.
+ */
+@Deprecated
 public class TalonSRXMotor extends Motor {
 
     // The number of encoder ticks per motor rotation

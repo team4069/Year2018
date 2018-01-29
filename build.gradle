@@ -1,6 +1,6 @@
 // Gradle plugin for Kotlin development
 buildscript {
-    ext.kotlin_version = "1.2.10"
+    ext.kotlin_version = "1.2.21"
     repositories {
         mavenCentral()
     }
@@ -15,6 +15,8 @@ plugins {
     id "idea"
     id "jaci.openrio.gradle.GradleRIO" version "2018.01.06b"
 }
+
+apply plugin: "kotlin"
 
 def TEAM = 4069
 def ROBOT_CLASS = "frc.team4069.robot.Robot"
@@ -46,7 +48,7 @@ dependencies {
     compile ctre()
     compile navx()
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

@@ -1,7 +1,7 @@
 package frc.team4069.robot.subsystems;
 
 import frc.team4069.robot.io.IOMapping;
-import frc.team4069.robot.motors.TalonSRXMotor;
+import frc.team4069.robot.motors.TalonMotor;
 
 // A class that manages all hardware components of the drive base and provides utility functions
 // for instructing it to drive and turn in a variety of ways
@@ -17,14 +17,14 @@ public class DriveBaseSubsystem extends SubsystemBase {
     private final double METERS_PER_ROTATION = 0.2;
 
     // Left and right drive motors
-    private TalonSRXMotor leftDriveMotor;
-    private TalonSRXMotor rightDriveMotor;
+    private TalonMotor leftDriveMotor;
+    private TalonMotor rightDriveMotor;
 
     // Initialize the drive motors
     private DriveBaseSubsystem() {
         // Initialize the motors with predefined port numbers
-        leftDriveMotor = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, false);
-        rightDriveMotor = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, false);
+        leftDriveMotor = new TalonMotor(IOMapping.LEFT_DRIVE_CAN_BUS, false);
+        rightDriveMotor = new TalonMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, false);
     }
 
     // A public getter for the instance

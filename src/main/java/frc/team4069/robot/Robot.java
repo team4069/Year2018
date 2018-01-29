@@ -1,18 +1,15 @@
 package frc.team4069.robot;
 
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.team4069.robot.commands.CommandBase;
-import frc.team4069.robot.commands.FlipClimberHookCommand;
 import frc.team4069.robot.commands.OperatorControlCommandGroup;
 import frc.team4069.robot.io.Input;
 
 public class Robot extends IterativeRobot {
 
     private Scheduler scheduler;
-    private String gameData;
 
     @Override
     public void robotInit() {
@@ -24,10 +21,6 @@ public class Robot extends IterativeRobot {
         // Configure the vision threads
 //        VisionData.configureVision();
 
-        // Data for which side of the switches and scales are ours is sent through FMS at the start of the match
-        // Follows the pattern LRL, where arr[0] is your switch, arr[1] is the scale, and arr[2] is their switch
-        // L meaning left, R meaning right
-        gameData = DriverStation.getInstance().getGameSpecificMessage();
         // Get the scheduler
         scheduler = Scheduler.getInstance();
         // Initialize the subsystems
@@ -37,8 +30,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
         super.autonomousInit();
-        // Add a climber flip command to the scheduler
-        scheduler.add(new FlipClimberHookCommand());
+        //TODO: Autonomous operations
     }
 
     @Override
@@ -57,7 +49,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousPeriodic() {
-        super.autonomousPeriodic();
         universalPeriodic();
     }
 
