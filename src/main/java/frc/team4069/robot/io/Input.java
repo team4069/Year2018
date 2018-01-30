@@ -3,9 +3,12 @@ package frc.team4069.robot.io;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.team4069.robot.commands.DebugCommand;
 import frc.team4069.robot.commands.StartElevatorDownCommand;
 import frc.team4069.robot.commands.StartElevatorUpCommand;
+import frc.team4069.robot.commands.StartVacuumCommand;
 import frc.team4069.robot.commands.StopElevatorCommand;
+import frc.team4069.robot.commands.StopVacuumCommand;
 
 // Class that provides accessors for joystick inputs and maps them to commands
 public class Input {
@@ -19,13 +22,22 @@ public class Input {
         // Create the joystick using the port number
         driveJoystick = new Joystick(IOMapping.DRIVE_JOYSTICK_NUMBER);
         controlJoystick = new Joystick(IOMapping.CONTROL_JOYSTICK_NUMBER);
-        Button b = new JoystickButton(controlJoystick, 1);
-        b.whenPressed(new StartElevatorUpCommand());
-        b.whenReleased(new StopElevatorCommand());
+        Button elevatorUp = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
+        elevatorUp.whenPressed(new StartElevatorUpCommand());
+        elevatorUp.whenReleased(new StopElevatorCommand());
 
-        Button bb = new JoystickButton(controlJoystick, 3);
-        bb.whenPressed(new StartElevatorDownCommand());
-        bb.whenReleased(new StopElevatorCommand());
+        Button stopVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
+        stopVacuum.whenPressed(new StopVacuumCommand());
+
+        Button elevatorDown = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
+        elevatorDown.whenPressed(new StartElevatorDownCommand());
+        elevatorDown.whenReleased(new StopElevatorCommand());
+
+        Button startVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_Y);
+        startVacuum.whenPressed(new StartVacuumCommand());
+
+        Button debugButton = new JoystickButton(controlJoystick, IOMapping.BUTTON_RB);
+        debugButton.whenPressed(new DebugCommand());
     }
 
     // Accessor for the steering axis on the drive joystick

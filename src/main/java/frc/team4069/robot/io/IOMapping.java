@@ -5,6 +5,7 @@ public class IOMapping {
 
     // CAN bus port for the climber hook motor
     public static final int ELEVATOR_CAN_BUS = 6;
+    public static final int VACUUM_CAN_BUS = 4;
     // CAN bus ports for the drive motors
     public static final int LEFT_DRIVE_CAN_BUS = 1;
     public static final int RIGHT_DRIVE_CAN_BUS = 2;
@@ -21,4 +22,11 @@ public class IOMapping {
     static final int DRIVE_BACKWARD_AXIS = 2;
     // The number of the POV (directional pad) used for quick turning
     static final int QUICK_TURN_POV = 0;
+
+    // Joystick buttons
+    static final int BUTTON_A = 1;
+    static final int BUTTON_B = 2;
+    static final int BUTTON_X = 3;
+    static final int BUTTON_Y = 4;
+    static final int BUTTON_RB = 5;
 }

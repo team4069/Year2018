@@ -31,7 +31,8 @@ object ElevatorSubsystem : SubsystemBase() {
         talon.setNeutralMode(NeutralMode.Brake)
 
         // Set the feed-forward gain
-        talon.config_kF(0, 0.5, 10);
+        talon.config_kF(0, 0.5, 10)
+        talon.setSelectedSensorPosition(0, 0, 10)
     }
 
     /**
