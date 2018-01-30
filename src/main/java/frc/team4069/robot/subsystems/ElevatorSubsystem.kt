@@ -29,12 +29,15 @@ object ElevatorSubsystem : SubsystemBase() {
 
         // Stop the elevator from coasting when the talon is stopped (probably)
         talon.setNeutralMode(NeutralMode.Brake)
+
+        // Set the feed-forward gain
+        talon.config_kF(0, 0.5, 10);
     }
 
     /**
      * Starts the elevator motor, rotating so that the elevator will go in [direction]
      */
-    fun start(direction: Direction) = talon.setConstantSpeed(if(direction == Direction.UP) 0.5 else -0.5)
+    fun start(direction: Direction) = talon.setConstantSpeed(if (direction == Direction.UP) 0.5 else -0.5)
 
     /**
      * Stops the elevator motor
