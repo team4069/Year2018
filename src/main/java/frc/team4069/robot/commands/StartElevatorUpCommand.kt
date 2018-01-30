@@ -1,11 +1,12 @@
 package frc.team4069.robot.commands
 
+import edu.wpi.first.wpilibj.command.InstantCommand
 import frc.team4069.robot.subsystems.ElevatorSubsystem
 
 /**
  * Command to start the elevator going upwards
  */
-class StartElevatorUpCommand : CommandBase() {
+class StartElevatorUpCommand : InstantCommand() {
 
     init {
         requires(ElevatorSubsystem)
@@ -14,6 +15,4 @@ class StartElevatorUpCommand : CommandBase() {
     override fun initialize() {
         ElevatorSubsystem.start(ElevatorSubsystem.Direction.UP)
     }
-
-    override fun isFinished(): Boolean = true
 }
