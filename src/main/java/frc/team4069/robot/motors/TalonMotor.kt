@@ -8,7 +8,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX
 /**
  * TalonSRX wrapper class with higher level APIs
  */
-class TalonMotor private constructor(private val talon: TalonSRX, private val reversed: Boolean) : IMotorControllerEnhanced by talon {
+class TalonMotor private constructor(private val talon: TalonSRX, private val reversed: Boolean)
+    : IMotorControllerEnhanced by talon {
 
     /**
      * Set a constant speed from -1 to 1 on the talon
@@ -26,17 +27,22 @@ class TalonMotor private constructor(private val talon: TalonSRX, private val re
      */
     fun stop() = set(ControlMode.Disabled, 0.0)
 
+    /**
+     * Get the distance traveled in rotations since it was last reset
+     */
     fun getDistanceTraveledRotations(): Double {
         val quadPosition = talon.sensorCollection.quadraturePosition.toDouble()
         return quadPosition / ENCODER_TICKS_PER_ROTATION
     }
 
-    constructor(deviceId: Int) : this(deviceId, false)
-    constructor(deviceId: Int, reversed: Boolean) : this(TalonSRX(deviceId), reversed) {
+    constructor(deviceId: Int, reversed: Boolean = false) : this(TalonSRX(deviceId), reversed) {
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10)
         talon.config_kP(0, 1.0, 10)
     }
 
+    /**
+     * Put constants here (static)
+     */
     companion object {
         const val ENCODER_TICKS_PER_ROTATION = 4096
     }
