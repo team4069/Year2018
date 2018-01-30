@@ -24,7 +24,7 @@ class TalonMotor private constructor(private val talon: TalonSRX, private val re
     /**
      * Stop the talon
      */
-    fun stop() = setConstantSpeed(0.0)
+    fun stop() = set(ControlMode.Disabled, 0.0)
 
     fun getDistanceTraveledRotations(): Double {
         val quadPosition = talon.sensorCollection.quadraturePosition.toDouble()
