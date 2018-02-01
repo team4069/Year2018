@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.team4069.robot.commands.elevator.ElevatorIntakeCommandGroup;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
-import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
+import frc.team4069.robot.commands.vacuum.ToggleVacuumCommand;
 import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
 
 
@@ -32,8 +32,8 @@ public class Input {
         elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
 
         // Stop the vacuum when the start button is pressed
-        Button stopVacuum = new JoystickButton(joystick, IOMapping.BUTTON_START);
-        stopVacuum.whenPressed(new StopVacuumCommand());
+        Button toggleVacuum = new JoystickButton(joystick, IOMapping.BUTTON_START);
+        toggleVacuum.whenPressed(new ToggleVacuumCommand());
     }
 
     // Accessor for the steering axis on the drive joystick
