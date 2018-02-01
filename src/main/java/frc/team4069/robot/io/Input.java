@@ -3,11 +3,10 @@ package frc.team4069.robot.io;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.team4069.robot.commands.elevator.StartElevatorDownCommand;
-import frc.team4069.robot.commands.elevator.StartElevatorUpCommand;
-import frc.team4069.robot.commands.elevator.StopElevatorCommand;
-import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
+import frc.team4069.robot.commands.elevator.ElevatorIntakeCommandGroup;
+import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
+import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
 
 
 // Class that provides accessors for joystick inputs and maps them to commands
@@ -21,19 +20,20 @@ public class Input {
         // Create the joystick using the port number
         joystick = new Joystick(IOMapping.JOYSTICK_NUMBER);
 
-        Button elevatorUp = new JoystickButton(joystick, IOMapping.BUTTON_A);
-        elevatorUp.whenPressed(new StartElevatorUpCommand());
-        elevatorUp.whenReleased(new StopElevatorCommand());
+        // Map the elevator controls for scale, switch, and exchange
+        Button elevatorToSwitch = new JoystickButton(joystick, IOMapping.BUTTON_B);
+        elevatorToSwitch.whenPressed(new SetElevatorPositionCommand(Position.SWITCH));
+        Button elevatorToExchange = new JoystickButton(joystick, IOMapping.BUTTON_X);
+        elevatorToExchange.whenPressed(new SetElevatorPositionCommand(Position.EXCHANGE));
+        Button elevatorToScale = new JoystickButton(joystick, IOMapping.BUTTON_Y);
+        elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE));
+        // Run a special command group for elevator intake
+        Button elevatorToIntake = new JoystickButton(joystick, IOMapping.BUTTON_A);
+        elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
 
-        Button stopVacuum = new JoystickButton(joystick, IOMapping.BUTTON_B);
+        // Stop the vacuum when the start button is pressed
+        Button stopVacuum = new JoystickButton(joystick, IOMapping.BUTTON_START);
         stopVacuum.whenPressed(new StopVacuumCommand());
-
-        Button elevatorDown = new JoystickButton(joystick, IOMapping.BUTTON_X);
-        elevatorDown.whenPressed(new StartElevatorDownCommand());
-        elevatorDown.whenReleased(new StopElevatorCommand());
-
-        Button startVacuum = new JoystickButton(joystick, IOMapping.BUTTON_Y);
-        startVacuum.whenPressed(new StartVacuumCommand());
     }
 
     // Accessor for the steering axis on the drive joystick

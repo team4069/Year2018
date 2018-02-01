@@ -7,20 +7,22 @@ import edu.wpi.first.wpilibj.InterruptHandlerFunction
 import frc.team4069.robot.io.IOMapping
 import frc.team4069.robot.motors.TalonMotor
 
-
-/**
- * Subsystem for controlling the cube elevator
- */
+// Subsystem for controlling the cube elevator
 object ElevatorSubsystem : SubsystemBase() {
+
+    // The maximum number of ticks that the elevator motor can safely reach
+    private const val maxElevatorPosition = 28586
+
+    // The number of ticks around the edges of the elevator's range in which it starts to slow down
+    private const val slowDownRange = 500
+
     // Motor to control
-    val talon = TalonMotor(IOMapping.ELEVATOR_CAN_BUS)
+    private val talon = TalonMotor(IOMapping.ELEVATOR_CAN_BUS)
     private val limitSwitch = DigitalInput(0)
 
-    val position: Double
-        get() = talon.getSelectedSensorPosition(0).toDouble()
-
     init {
-        // Set up a rising edge interrupt for limitSwitch, stop the talon and zero the sensor when it's tripped
+        // Set up a rising edge interrupt for limitSwitch
+        // Stop the talon and zero the sensor when it's tripped
         limitSwitch.requestInterrupts(object : InterruptHandlerFunction<Any>() {
             override fun interruptFired(interruptAssertedMask: Int, param: Any?) {
                 talon.stop()
@@ -39,45 +41,32 @@ object ElevatorSubsystem : SubsystemBase() {
         talon.setSelectedSensorPosition(0, 0, 10)
     }
 
-    /**
-     * Starts the elevator motor, rotating so that the elevator will go in [direction]
-     */
-    fun start(direction: Direction) = talon.setConstantSpeed(if (direction == Direction.UP) 0.5 else -0.5)
-
-    /**
-     * Stops the elevator motor
-     */
+    // Stops the elevator motor
     fun stop() = talon.stop()
 
-    fun set(mode: ControlMode, demand: Double) {
-        var motorValue = demand
-        if (mode == ControlMode.PercentOutput) {
-            if (talon.getSelectedSensorPosition(0) - MAXIMUM_TICKS <= 500
-                    || Math.abs(talon.getSelectedSensorPosition(0)) <= 500) { // TODO: Fine tune these values, check the second boolean
-                motorValue *= 0.5
-            }
-        }
-
-
-        talon.set(mode, motorValue)
+    // Set the speed of the elevator
+    fun setSpeed(speed: Double) {
+        // Check if the elevator is currently positioned near one of the edges of its range
+        val elevatorPosition = talon.getSelectedSensorPosition(0)
+        val nearEdge = elevatorPosition > (maxElevatorPosition - slowDownRange)
+                || elevatorPosition < slowDownRange
+        // If the elevator is near the edge, use only half of the provided speed
+        val percentOutput = if (nearEdge) speed / 2 else speed
+        // Set the speed of the motor
+        talon.set(ControlMode.PercentOutput, percentOutput)
     }
 
-    /**
-     * Direction to push the elevator in
-     */
-    enum class Direction {
-        UP,
-        DOWN
+    // Set the position of the elevator using one of the presets
+    fun setPosition(position: Position) {
+        // Use motion magic with the number corresponding to the position
+        talon.set(ControlMode.MotionMagic, position.ticks.toDouble())
     }
 
-    //TODO: Fill in tick values
+    // Enum that holds tick values for the various positions that the elevator must go to
     enum class Position(val ticks: Int) {
-        MINIMUM(-1),
-        GRAB_CUBE(-1),
-        EXCHANGE(-1),
-        SWITCH_HEIGHT(-1),
-        SCALE_HEIGHT(MAXIMUM_TICKS)
+        INTAKE(0),
+        EXCHANGE(3000),
+        SWITCH(15000),
+        SCALE(maxElevatorPosition)
     }
-
-    const val MAXIMUM_TICKS = -28586
 }

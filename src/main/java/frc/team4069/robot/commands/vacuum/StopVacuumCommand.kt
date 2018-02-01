@@ -8,5 +8,5 @@ class StopVacuumCommand : InstantCommand() {
         requires(VacuumSubsystem)
     }
 
-    override fun initialize() = VacuumSubsystem.endSucc()
+    override fun initialize() = VacuumSubsystem.stop()
 }

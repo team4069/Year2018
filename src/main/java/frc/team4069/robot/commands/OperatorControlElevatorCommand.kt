@@ -1,25 +1,26 @@
 package frc.team4069.robot.commands
 
-import com.ctre.phoenix.motorcontrol.ControlMode
+import edu.wpi.first.wpilibj.command.Command
 import frc.team4069.robot.io.Input
 import frc.team4069.robot.subsystems.ElevatorSubsystem
 
-class OperatorControlElevatorCommand : CommandBase() {
+class OperatorControlElevatorCommand : Command() {
+
+    // Require the elevator subsystem
     init {
         requires(ElevatorSubsystem)
     }
 
-    var isInUse = false
-
+    // Executed periodically while this command is running
     override fun execute() {
-        val value = Input.getElevatorAxis()
-        isInUse = value != 0.0
-        if(isInUse) {
-            ElevatorSubsystem.set(ControlMode.PercentOutput, value)
-        }else {
-            ElevatorSubsystem.set(ControlMode.MotionMagic, ElevatorSubsystem.position + 500)
+        // If the elevator stick is being used
+        val elevatorAxis = Input.getElevatorAxis()
+        if (elevatorAxis != 0.0) {
+            // Set the speed of the elevator using the axis directly
+            ElevatorSubsystem.setSpeed(elevatorAxis)
         }
     }
 
+    // This command should never complete
     override fun isFinished(): Boolean = false
 }
