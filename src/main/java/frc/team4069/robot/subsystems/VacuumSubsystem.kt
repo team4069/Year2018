@@ -15,4 +15,6 @@ object VacuumSubsystem : SubsystemBase() {
      * Stops the vacuum motor
      */
     fun endSucc() = talon.stop()
+
+    fun isStarted(): Boolean = talon.isStarted()
 }

@@ -9,6 +9,7 @@ import frc.team4069.robot.commands.elevator.StopElevatorCommand;
 import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
 import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
 
+
 // Class that provides accessors for joystick inputs and maps them to commands
 public class Input {
 
