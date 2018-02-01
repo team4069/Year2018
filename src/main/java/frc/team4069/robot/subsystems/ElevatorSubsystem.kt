@@ -1,5 +1,6 @@
 package frc.team4069.robot.subsystems
 
+import com.ctre.phoenix.motorcontrol.ControlMode
 import com.ctre.phoenix.motorcontrol.NeutralMode
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.InterruptHandlerFunction
@@ -12,8 +13,11 @@ import frc.team4069.robot.motors.TalonMotor
  */
 object ElevatorSubsystem : SubsystemBase() {
     // Motor to control
-    val talon = TalonMotor(IOMapping.ELEVATOR_CAN_BUS, reversed = true)
+    val talon = TalonMotor(IOMapping.ELEVATOR_CAN_BUS)
     private val limitSwitch = DigitalInput(0)
+
+    val position: Double
+        get() = talon.getSelectedSensorPosition(0).toDouble()
 
     init {
         // Set up a rising edge interrupt for limitSwitch, stop the talon and zero the sensor when it's tripped
@@ -45,6 +49,19 @@ object ElevatorSubsystem : SubsystemBase() {
      */
     fun stop() = talon.stop()
 
+    fun set(mode: ControlMode, demand: Double) {
+        var demand = demand
+        if(mode == ControlMode.PercentOutput) {
+            if (talon.getSelectedSensorPosition(0) - MAXIMUM_TICKS <= 500
+                    || Math.abs(talon.getSelectedSensorPosition(0)) <= 500) { // TODO: Fine tune these values, check the second boolean
+                demand *= 0.5
+            }
+        }
+
+
+        talon.set(mode, demand)
+    }
+
     /**
      * Direction to push the elevator in
      */
@@ -52,4 +69,15 @@ object ElevatorSubsystem : SubsystemBase() {
         UP,
         DOWN
     }
+
+    //TODO: Fill in tick values
+    enum class Position(val ticks: Int) {
+        MINIMUM(-1),
+        GRAB_CUBE(-1),
+        EXCHANGE(-1),
+        SWITCH_HEIGHT(-1),
+        SCALE_HEIGHT(MAXIMUM_TICKS)
+    }
+
+    const val MAXIMUM_TICKS = -28586
 }

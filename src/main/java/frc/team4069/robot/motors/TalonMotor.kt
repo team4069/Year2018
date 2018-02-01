@@ -25,7 +25,7 @@ class TalonMotor private constructor(private val talon: TalonSRX, private val re
     /**
      * Stop the talon
      */
-    fun stop() = set(ControlMode.Disabled, 0.0)
+    fun stop() = neutralOutput()
 
     /**
      * Get the distance traveled in rotations since it was last reset

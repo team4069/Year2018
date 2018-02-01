@@ -3,12 +3,11 @@ package frc.team4069.robot.io;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.team4069.robot.commands.DebugCommand;
-import frc.team4069.robot.commands.StartElevatorDownCommand;
-import frc.team4069.robot.commands.StartElevatorUpCommand;
-import frc.team4069.robot.commands.StartVacuumCommand;
-import frc.team4069.robot.commands.StopElevatorCommand;
-import frc.team4069.robot.commands.StopVacuumCommand;
+import frc.team4069.robot.commands.elevator.StartElevatorDownCommand;
+import frc.team4069.robot.commands.elevator.StartElevatorUpCommand;
+import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
+import frc.team4069.robot.commands.elevator.StopElevatorCommand;
+import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
 
 // Class that provides accessors for joystick inputs and maps them to commands
 public class Input {
@@ -35,14 +34,15 @@ public class Input {
 
         Button startVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_Y);
         startVacuum.whenPressed(new StartVacuumCommand());
-
-        Button debugButton = new JoystickButton(controlJoystick, IOMapping.BUTTON_RB);
-        debugButton.whenPressed(new DebugCommand());
     }
 
     // Accessor for the steering axis on the drive joystick
     public static double getSteeringAxis() {
         return driveJoystick.getRawAxis(IOMapping.DRIVE_STEERING_AXIS);
+    }
+
+    public static double getElevatorAxis() {
+        return controlJoystick.getRawAxis(IOMapping.ELEVATOR_CONTROL_AXIS);
     }
 
     // Accessor for the drive speed, using the left and right triggers

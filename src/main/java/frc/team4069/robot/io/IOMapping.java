@@ -22,6 +22,8 @@ public class IOMapping {
     static final int DRIVE_BACKWARD_AXIS = 2;
     // The number of the POV (directional pad) used for quick turning
     static final int QUICK_TURN_POV = 0;
+    // Axis for manual control of the elevator. Vertical axis of the left stick
+    static final int ELEVATOR_CONTROL_AXIS = 1;
 
     // Joystick buttons
     static final int BUTTON_A = 1;

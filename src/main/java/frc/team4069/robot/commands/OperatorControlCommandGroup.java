@@ -9,6 +9,7 @@ public class OperatorControlCommandGroup extends CommandGroup {
     public OperatorControlCommandGroup() {
         // Add the command for driving
         addParallel(new OperatorDriveCommand());
+        addParallel(new OperatorControlElevatorCommand());
     }
 
 }
