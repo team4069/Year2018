@@ -31,4 +31,5 @@ public class IOMapping {
     static final int BUTTON_X = 3;
     static final int BUTTON_Y = 4;
     static final int BUTTON_RB = 5;
+    static final int BUTTON_START = 8;
 }

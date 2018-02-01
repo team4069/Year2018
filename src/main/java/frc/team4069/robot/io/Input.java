@@ -5,9 +5,8 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.team4069.robot.commands.elevator.StartElevatorDownCommand;
 import frc.team4069.robot.commands.elevator.StartElevatorUpCommand;
-import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
 import frc.team4069.robot.commands.elevator.StopElevatorCommand;
-import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
+import frc.team4069.robot.commands.vacuum.ToggleVacuumCommand;
 
 // Class that provides accessors for joystick inputs and maps them to commands
 public class Input {
@@ -25,15 +24,12 @@ public class Input {
         elevatorUp.whenPressed(new StartElevatorUpCommand());
         elevatorUp.whenReleased(new StopElevatorCommand());
 
-        Button stopVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
-        stopVacuum.whenPressed(new StopVacuumCommand());
-
         Button elevatorDown = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
         elevatorDown.whenPressed(new StartElevatorDownCommand());
         elevatorDown.whenReleased(new StopElevatorCommand());
 
-        Button startVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_Y);
-        startVacuum.whenPressed(new StartVacuumCommand());
+        Button toggleVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_START);
+        toggleVacuum.whenPressed(new ToggleVacuumCommand());
     }
 
     // Accessor for the steering axis on the drive joystick
