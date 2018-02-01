@@ -10,25 +10,27 @@ public class IOMapping {
     public static final int LEFT_DRIVE_CAN_BUS = 1;
     public static final int RIGHT_DRIVE_CAN_BUS = 2;
 
-    // The port number of the drive joystick
-    static final int DRIVE_JOYSTICK_NUMBER = 0;
-    static final int CONTROL_JOYSTICK_NUMBER = 1;
-    // Axis numbers for steering and speed on the drive joystick
-    // The steering axis is the horizontal axis of the left stick
-    static final int DRIVE_STEERING_AXIS = 0;
-    // Right trigger drives forward
-    static final int DRIVE_FORWARD_AXIS = 3;
-    // Left trigger drives backward
-    static final int DRIVE_BACKWARD_AXIS = 2;
-    // The number of the POV (directional pad) used for quick turning
-    static final int QUICK_TURN_POV = 0;
-    // Axis for manual control of the elevator. Vertical axis of the left stick
-    static final int ELEVATOR_CONTROL_AXIS = 1;
+    // The port number of the joystick
+    static final int JOYSTICK_NUMBER = 0;
+
+    // Analog axes
+    static final int LEFT_STICK_HORIZONTAL_AXIS = 0;
+    static final int LEFT_STICK_VERTICAL_AXIS = 1;
+    static final int LEFT_TRIGGER_AXIS = 2;
+    static final int RIGHT_TRIGGER_AXIS = 3;
+    static final int RIGHT_STICK_HORIZONTAL_AXIS = 4;
+    static final int RIGHT_STICK_VERTICAL_AXIS = 5;
+
+    // The number of the POV (directional pad)
+    static final int POV_NUMBER = 0;
 
     // Joystick buttons
     static final int BUTTON_A = 1;
     static final int BUTTON_B = 2;
     static final int BUTTON_X = 3;
     static final int BUTTON_Y = 4;
-    static final int BUTTON_RB = 5;
+    static final int BUMPER_LEFT = 5;
+    static final int BUMPER_RIGHT = 6;
+    static final int BUTTON_BACK = 7;
+    static final int BUTTON_START = 8;
 }

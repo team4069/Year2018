@@ -50,16 +50,16 @@ object ElevatorSubsystem : SubsystemBase() {
     fun stop() = talon.stop()
 
     fun set(mode: ControlMode, demand: Double) {
-        var demand = demand
-        if(mode == ControlMode.PercentOutput) {
+        var motorValue = demand
+        if (mode == ControlMode.PercentOutput) {
             if (talon.getSelectedSensorPosition(0) - MAXIMUM_TICKS <= 500
                     || Math.abs(talon.getSelectedSensorPosition(0)) <= 500) { // TODO: Fine tune these values, check the second boolean
-                demand *= 0.5
+                motorValue *= 0.5
             }
         }
 
 
-        talon.set(mode, demand)
+        talon.set(mode, motorValue)
     }
 
     /**
