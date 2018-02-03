@@ -3,7 +3,7 @@ package frc.team4069.robot.io;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.team4069.robot.commands.elevator.ElevatorIntakeCommandGroup;
+import frc.team4069.robot.commands.ElevatorIntakeCommandGroup;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.vacuum.ToggleVacuumCommand;
 import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;

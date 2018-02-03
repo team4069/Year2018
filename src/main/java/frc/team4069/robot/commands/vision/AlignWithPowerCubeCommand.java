@@ -10,7 +10,7 @@ public class AlignWithPowerCubeCommand extends CommandBase {
     private final int verticalPositionThreshold = 10;
 
     // Constructor, used to claim subsystems
-    AlignWithPowerCubeCommand() {
+    public AlignWithPowerCubeCommand() {
         // Claim exclusive use of the drive base
         requires(driveBase);
     }
