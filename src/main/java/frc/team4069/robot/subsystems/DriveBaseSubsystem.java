@@ -60,42 +60,43 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed) {
-        // Use the cheesy drive algorithm to calculate the necessary speeds
-        WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn, speed);
+        // A special case: if the speed is zero, turn on the spot
+        if (speed == 0) {
+            // Simply use the turn coefficient and its negative for the wheel speeds, since it is
+            // within the range of -1 and 1, and a sharper turn will result in faster rotation
+            leftDriveMotor.setConstantSpeed(turn);
+            rightDriveMotor.setConstantSpeed(-turn);
+        }
+        // Otherwise, we will use the standard algorithm
+        else {
+            // Use the cheesy drive algorithm to calculate the necessary speeds
+            WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn, speed);
 
-        // Set the motor speeds with the calculated values
-        leftDriveMotor.setConstantSpeed(wheelSpeeds.leftWheelSpeed);
-        rightDriveMotor.setConstantSpeed(wheelSpeeds.rightWheelSpeed);
+            // Set the motor speeds with the calculated values
+            leftDriveMotor.setConstantSpeed(wheelSpeeds.leftWheelSpeed);
+            rightDriveMotor.setConstantSpeed(wheelSpeeds.rightWheelSpeed);
+        }
     }
 
     // A function that takes a turning coefficient from -1 to 1 and a speed and calculates the
     // left and right wheel speeds using a generalized cheesy drive algorithm
     // Credit to Team 254 for the original algorithm
     private WheelSpeeds generalizedCheesyDrive(double turn, double speed) {
-        // First, a special case: if the speed is zero, turn on the spot
-        if (speed == 0) {
-            // Simply use the turn coefficient and its negative for the wheel speeds, since it is
-            // within the range of -1 and 1, and a sharper turn will result in faster rotation
-            return new WheelSpeeds(turn, -turn);
-        }
-        // Otherwise, we will use the standard algorithm
-        else {
-            // Apply a polynomial function to the speed and multiply it by the turning coefficient
-            // This adds a non-linearity so that turning is quicker at lower speeds
-            // This number will be half of the difference in speed between the two wheels
-            // Get the sign of the speed and use the absolute value because the polynomial may give
-            // imaginary numbers for negative speed values
-            double speedSign = speed > 0 ? 1 : -1;
-            // Use the absolute value in the polynomial calculation
-            // and multiply the result by the sign
-            double wheelSpeedDifference = speedPolynomial(Math.abs(speed)) * turn * speedSign;
-            // Add this difference to the overall speed to get the left wheel speed and subtract it
-            // from the overall speed to get the right wheel speed
-            return new WheelSpeeds(
-                    speed + wheelSpeedDifference,
-                    speed - wheelSpeedDifference
-            );
-        }
+        // Apply a polynomial function to the speed and multiply it by the turning coefficient
+        // This adds a non-linearity so that turning is quicker at lower speeds
+        // This number will be half of the difference in speed between the two wheels
+        // Get the sign of the speed and use the absolute value because the polynomial may give
+        // imaginary numbers for negative speed values
+        double speedSign = speed > 0 ? 1 : -1;
+        // Use the absolute value in the polynomial calculation
+        // and multiply the result by the sign
+        double wheelSpeedDifference = speedPolynomial(Math.abs(speed)) * turn * speedSign;
+        // Add this difference to the overall speed to get the left wheel speed and subtract it
+        // from the overall speed to get the right wheel speed
+        return new WheelSpeeds(
+                speed + wheelSpeedDifference,
+                speed - wheelSpeedDifference
+        );
     }
 
     // The polynomial function applied to the speed during turn computation

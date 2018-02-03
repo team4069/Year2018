@@ -8,8 +8,8 @@ import frc.team4069.robot.subsystems.ElevatorSubsystem;
 public abstract class CommandBase extends Command {
 
     // Instances of each of the subsystems
-    static DriveBaseSubsystem driveBase;
-    static ElevatorSubsystem elevator;
+    protected static DriveBaseSubsystem driveBase;
+    protected static ElevatorSubsystem elevator;
 
     // An function that handles initialization of subsystems
     public static void init() {

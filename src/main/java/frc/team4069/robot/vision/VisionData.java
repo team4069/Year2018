@@ -13,6 +13,10 @@ import java.util.List;
 // The static class that contains the vision threads and the data updated by them
 public class VisionData {
 
+    // The dimensions of the image captured by both cameras
+    public static final int imageWidth = 320;
+    public static final int imageHeight = 240;
+
     // The number of lines that will be found and averaged
     private static final int numLines = 4;
 
@@ -31,9 +35,9 @@ public class VisionData {
         // front of the robot, respectively
         CameraServer server = CameraServer.getInstance();
         UsbCamera frontCamera = server.startAutomaticCapture(0);
-        frontCamera.setResolution(320, 240);
+        frontCamera.setResolution(imageWidth, imageHeight);
 //        UsbCamera armCamera = server.startAutomaticCapture(1);
-//        armCamera.setResolution(320, 240);
+//        armCamera.setResolution(imageWidth, imageHeight);
 
         // Initialize the front camera thread, updating the average position of the lines each frame
         VisionThread frontCameraVisionThread = new VisionThread(frontCamera,
