@@ -11,6 +11,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX
 class TalonMotor private constructor(private val talon: TalonSRX, private val reversed: Boolean)
     : IMotorControllerEnhanced by talon {
 
+    private val slaves = mutableListOf<TalonMotor>()
+
     /**
      * Set a constant speed from -1 to 1 on the talon
      */
@@ -37,9 +39,15 @@ class TalonMotor private constructor(private val talon: TalonSRX, private val re
         return quadPosition / ENCODER_TICKS_PER_ROTATION
     }
 
-    constructor(deviceId: Int, reversed: Boolean = false) : this(TalonSRX(deviceId), reversed) {
+    constructor(deviceId: Int, reversed: Boolean = false, vararg slaves: Int) : this(TalonSRX(deviceId), reversed) {
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10)
         talon.config_kP(0, 1.0, 10)
+
+        for(slaveId in slaves) {
+            val slave = TalonMotor(slaveId, reversed)
+            slave.follow(this)
+            this.slaves.add(slave)
+        }
     }
 
     /**
