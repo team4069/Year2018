@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.commands.OperatorControlCommandGroup;
 import frc.team4069.robot.io.Input;
+import frc.team4069.robot.vision.VisionData;
 
 public class Robot extends IterativeRobot {
 
@@ -19,7 +20,7 @@ public class Robot extends IterativeRobot {
         Input.init();
 
         // Configure the vision threads
-//        VisionData.configureVision();
+        VisionData.configureVision();
 
         // Get the scheduler
         scheduler = Scheduler.getInstance();
