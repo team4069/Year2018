@@ -1,11 +1,14 @@
 package frc.team4069.robot.io;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.team4069.robot.commands.elevator.ElevatorIntakeCommandGroup;
+import frc.team4069.robot.commands.elevator.DebugCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.vacuum.ToggleVacuumCommand;
+import frc.team4069.robot.commands.winch.StartWinchCommand;
+import frc.team4069.robot.commands.winch.StopWinchCommand;
 import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
 
 
@@ -13,12 +16,12 @@ import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
 public class Input {
 
     // The main joystick
-    private static Joystick joystick;
+    private static XboxController joystick;
 
     // Initializer that handles mapping of the joysticks to commands
     public static void init() {
         // Create the joystick using the port number
-        joystick = new Joystick(IOMapping.JOYSTICK_NUMBER);
+        joystick = new XboxController(IOMapping.JOYSTICK_NUMBER);
 
         // Map the elevator controls for scale, switch, and exchange
         Button elevatorToSwitch = new JoystickButton(joystick, IOMapping.BUTTON_B);
@@ -29,7 +32,16 @@ public class Input {
         elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE));
         // Run a special command group for elevator intake
         Button elevatorToIntake = new JoystickButton(joystick, IOMapping.BUTTON_A);
-        elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
+//        elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
+        elevatorToIntake.whenPressed(new DebugCommand()); //TODO: Get rid of me when position values are found
+
+        Button winchForward = new JoystickButton(joystick, IOMapping.BUMPER_RIGHT);
+        winchForward.whenPressed(new StartWinchCommand());
+        winchForward.whenReleased(new StopWinchCommand());
+
+        Button winchBackward = new JoystickButton(joystick, IOMapping.BUMPER_LEFT);
+        winchBackward.whenPressed(new StartWinchCommand(true));
+        winchBackward.whenReleased(new StopWinchCommand());
 
         // Stop the vacuum when the start button is pressed
         Button toggleVacuum = new JoystickButton(joystick, IOMapping.BUTTON_START);
@@ -39,13 +51,26 @@ public class Input {
     // Accessor for the steering axis on the drive joystick
     public static double getSteeringAxis() {
         // Use the horizontal axis on the left stick
-        return joystick.getRawAxis(IOMapping.LEFT_STICK_HORIZONTAL_AXIS);
+        double axis = joystick.getX(Hand.kLeft);
+        // Deadband on the axis ± 0.2 because of joystick drift
+        if((axis <= 0.2 && axis > 0) || (axis >= -0.2 && axis < 0)) {
+            return 0;
+        } else {
+            return axis;
+        }
     }
 
     // Accessor for the elevator axis on the drive joystick
     public static double getElevatorAxis() {
         // Use the vertical axis on the right stick
-        return joystick.getRawAxis(IOMapping.RIGHT_STICK_VERTICAL_AXIS);
+        double axis = joystick.getY(Hand.kRight);
+
+        // Deadband on the axis ± 0.15 because of joystick drift
+        if((axis <= 0.15 && axis > 0) || (axis >= -0.15 && axis < 0)) {
+            return 0;
+        }else {
+            return axis;
+        }
     }
 
     // Accessor for the drive speed, using the left and right triggers

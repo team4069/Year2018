@@ -2,8 +2,6 @@ package frc.team4069.robot.subsystems
 
 import com.ctre.phoenix.motorcontrol.ControlMode
 import com.ctre.phoenix.motorcontrol.NeutralMode
-import edu.wpi.first.wpilibj.DigitalInput
-import edu.wpi.first.wpilibj.InterruptHandlerFunction
 import frc.team4069.robot.io.IOMapping
 import frc.team4069.robot.motors.TalonMotor
 
@@ -14,46 +12,43 @@ object ElevatorSubsystem : SubsystemBase() {
     private const val maxElevatorPosition = 28586
 
     // The number of ticks around the edges of the elevator's range in which it starts to slow down
-    private const val slowDownRange = 500
+    private const val slowDownRange = 2500
+
+    val position: Int
+        get() = talon.getSelectedSensorPosition(0)
 
     // Motor to control
     private val talon = TalonMotor(IOMapping.ELEVATOR_CAN_BUS)
-    private val limitSwitch = DigitalInput(0)
 
     init {
-        // Set up a rising edge interrupt for limitSwitch
-        // Stop the talon and zero the sensor when it's tripped
-        limitSwitch.requestInterrupts(object : InterruptHandlerFunction<Any>() {
-            override fun interruptFired(interruptAssertedMask: Int, param: Any?) {
-                talon.stop()
-                talon.setSelectedSensorPosition(0, 0, 10)
-            }
-        })
-
-        // Enable interrupts for the limit switch
-        limitSwitch.enableInterrupts()
-
         // Stop the elevator from coasting when the talon is stopped (probably)
         talon.setNeutralMode(NeutralMode.Brake)
 
         // Set the feed-forward gain
         talon.config_kF(0, 0.5, 10)
-        talon.setSelectedSensorPosition(0, 0, 10)
+        talon.setSelectedSensorPosition(0, 0, 0)
     }
 
     // Stops the elevator motor
     fun stop() = talon.stop()
 
+    fun set(mode: ControlMode, speed: Double) {
+        if (mode == ControlMode.PercentOutput) {
+            val elevatorPosition = talon.getSelectedSensorPosition(0)
+            val nearEdge = elevatorPosition > (maxElevatorPosition - slowDownRange)
+                    || elevatorPosition < slowDownRange
+            // If the elevator is near the edge, use only half of the provided speed
+            val percentOutput = if (nearEdge) speed / 2 else speed
+            // Set the speed of the motor
+            talon.set(ControlMode.PercentOutput, percentOutput)
+        } else {
+            talon.set(mode, speed)
+        }
+    }
+
     // Set the speed of the elevator
     fun setSpeed(speed: Double) {
-        // Check if the elevator is currently positioned near one of the edges of its range
-        val elevatorPosition = talon.getSelectedSensorPosition(0)
-        val nearEdge = elevatorPosition > (maxElevatorPosition - slowDownRange)
-                || elevatorPosition < slowDownRange
-        // If the elevator is near the edge, use only half of the provided speed
-        val percentOutput = if (nearEdge) speed / 2 else speed
-        // Set the speed of the motor
-        talon.set(ControlMode.PercentOutput, percentOutput)
+        set(ControlMode.PercentOutput, speed)
     }
 
     // Set the position of the elevator using one of the presets
