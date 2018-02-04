@@ -65,8 +65,8 @@ public class Input {
         // Use the vertical axis on the right stick
         double axis = joystick.getY(Hand.kRight);
 
-        // Deadband on the axis ± 0.15 because of joystick drift
-        if((axis <= 0.15 && axis > 0) || (axis >= -0.15 && axis < 0)) {
+        // Deadband on the axis ± 0.2 because of joystick drift
+        if((axis <= 0.2 && axis > 0) || (axis >= -0.2 && axis < 0)) {
             return 0;
         }else {
             return axis;

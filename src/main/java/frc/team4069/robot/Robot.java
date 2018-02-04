@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.commands.OperatorControlCommandGroup;
 import frc.team4069.robot.io.Input;
+import frc.team4069.robot.subsystems.ElevatorSubsystem;
 
 public class Robot extends IterativeRobot {
 
@@ -40,6 +41,12 @@ public class Robot extends IterativeRobot {
         scheduler.removeAll();
         // Add an operator control command group to the scheduler, which should never exit
         scheduler.add(new OperatorControlCommandGroup());
+    }
+
+    @Override
+    public void disabledInit() {
+        // Reset the state of the elevator subsystem so that it doesn't take off when next we enable
+        ElevatorSubsystem.INSTANCE.reset();
     }
 
     // During all phases, run the command scheduler

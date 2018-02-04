@@ -65,6 +65,12 @@ public class DriveBaseSubsystem extends SubsystemBase {
         rightDrive.stop();
     }
 
+    public void quickTurn(double turn) {
+        WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn, 0);
+        leftDrive.setConstantSpeed(leftSideLpf.calculate(wheelSpeeds.leftWheelSpeed));
+        rightDrive.setConstantSpeed(rightSideLpf.calculate(wheelSpeeds.rightWheelSpeed));
+    }
+
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed) {
         // Use the cheesy drive algorithm to calculate the necessary speeds

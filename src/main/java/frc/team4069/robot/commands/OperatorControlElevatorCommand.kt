@@ -12,7 +12,7 @@ class OperatorControlElevatorCommand : Command() {
         requires(ElevatorSubsystem)
     }
 
-    var set = false
+    var set = true
 
     // Executed periodically while this command is running
     override fun execute() {
@@ -22,7 +22,6 @@ class OperatorControlElevatorCommand : Command() {
             // Set the speed of the elevator using the axis directly
             ElevatorSubsystem.setSpeed(elevatorAxis)
             set = false
-//        }
         }else {
             if(!set) {
                 ElevatorSubsystem.set(ControlMode.MotionMagic, (ElevatorSubsystem.position - 500).toDouble())

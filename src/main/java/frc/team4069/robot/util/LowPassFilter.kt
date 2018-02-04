@@ -12,7 +12,7 @@ data class LowPassFilter(val rc: Int = 100) {
 
     fun calculate(value: Double): Double {
         if(lastTime > 0) {
-            val time = Date().time
+            val time = System.currentTimeMillis()
             var a = (time - lastTime).toDouble()
 
             a /= (a + rc)

@@ -34,13 +34,13 @@ object ElevatorSubsystem : SubsystemBase() {
 
     fun set(mode: ControlMode, speed: Double) {
         if (mode == ControlMode.PercentOutput) {
-            val elevatorPosition = talon.getSelectedSensorPosition(0)
-            val nearEdge = elevatorPosition > (maxElevatorPosition - slowDownRange)
-                    || elevatorPosition < slowDownRange
+//            val elevatorPosition = talon.getSelectedSensorPosition(0)
+//            val nearEdge = elevatorPosition > (maxElevatorPosition - slowDownRange)
+//                    || elevatorPosition < slowDownRange
             // If the elevator is near the edge, use only half of the provided speed
-            val percentOutput = if (nearEdge) speed / 2 else speed
+//            val percentOutput = if (nearEdge) speed / 2 else speed
             // Set the speed of the motor
-            talon.set(ControlMode.PercentOutput, percentOutput)
+            talon.set(ControlMode.PercentOutput, speed)
         } else {
             talon.set(mode, speed)
         }
@@ -55,6 +55,11 @@ object ElevatorSubsystem : SubsystemBase() {
     fun setPosition(position: Position) {
         // Use motion magic with the number corresponding to the position
         talon.set(ControlMode.MotionMagic, position.ticks.toDouble())
+    }
+
+    fun reset() {
+        talon.stop()
+        talon.setSelectedSensorPosition(0, 0, 0)
     }
 
     // Enum that holds tick values for the various positions that the elevator must go to
