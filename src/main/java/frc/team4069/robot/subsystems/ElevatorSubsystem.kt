@@ -69,7 +69,7 @@ object ElevatorSubsystem : SubsystemBase() {
                 talon.set(ControlMode.PercentOutput, speed) //TODO: Do this properly
             }
             ControlMode.MotionMagic -> {
-                talon.set(mode, if (speed < maxElevatorPosition) speed else maxElevatorPosition.toDouble())
+                talon.set(mode, if (speed < MAX_POSITION_TICKS) speed else MAX_POSITION_TICKS.toDouble())
             }
             else -> talon.set(mode, speed)
         }
