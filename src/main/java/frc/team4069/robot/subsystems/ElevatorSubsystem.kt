@@ -2,7 +2,6 @@ package frc.team4069.robot.subsystems
 
 import com.ctre.phoenix.motorcontrol.ControlMode
 import com.ctre.phoenix.motorcontrol.FeedbackDevice
-import com.ctre.phoenix.motorcontrol.NeutralMode
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj.InterruptHandlerFunction
 import frc.team4069.robot.io.IOMapping
@@ -15,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 object ElevatorSubsystem : SubsystemBase() {
 
     // The maximum number of ticks that the elevator motor can safely reach
-    private const val maxElevatorPosition = -26901
+    const val MAX_POSITION_TICKS = -26901
 
     // The number of ticks around the edges of the elevator's range in which it starts to slow down
     private const val slowDownRange = 2500
@@ -32,7 +31,6 @@ object ElevatorSubsystem : SubsystemBase() {
     init {
         // Stop the elevator from coasting when the talon is stopped (probably)
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0)
-        talon.setNeutralMode(NeutralMode.Brake)
 
         // Set the feed-forward gain
         talon.config_kF(0, 0.5, 10)
@@ -98,6 +96,6 @@ object ElevatorSubsystem : SubsystemBase() {
         INTAKE(0),
         EXCHANGE(3000),
         SWITCH(15000),
-        SCALE(maxElevatorPosition)
+        SCALE(MAX_POSITION_TICKS)
     }
 }
