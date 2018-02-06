@@ -17,7 +17,7 @@ class OperatorControlElevatorCommand : Command() {
     // Executed periodically while this command is running
     override fun execute() {
         // If the elevator stick is being used
-        val elevatorAxis = Input.getElevatorAxis()
+        val elevatorAxis = Input.getElevatorAxis() * 0.8
         if (elevatorAxis != 0.0) {
             // Set the speed of the elevator using the axis directly
             ElevatorSubsystem.setSpeed(elevatorAxis)

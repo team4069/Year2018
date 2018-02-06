@@ -7,6 +7,7 @@ public class IOMapping {
     public static final int ELEVATOR_CAN_BUS = 16;
     public static final int VACUUM_CAN_BUS = 21;
     public static final int WINCH_CAN_BUS = 10;
+    public static final int ARM_CAN_BUS = 24;
     // CAN bus ports for the drive motors
     public static final int LEFT_DRIVE_CAN_BUS = 12;
     public static final int RIGHT_DRIVE_CAN_BUS = 19;
