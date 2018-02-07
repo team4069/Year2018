@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.commands.OperatorControlCommandGroup;
-import frc.team4069.robot.commands.autonomous.DriveToSwitchCommand;
+import frc.team4069.robot.commands.arm.StartArmCommand;
 import frc.team4069.robot.io.Input;
 import frc.team4069.robot.subsystems.ArmSubsystem;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
@@ -33,8 +33,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
         super.autonomousInit();
-        // Drive forward and turn towards the switch
-        scheduler.add(new DriveToSwitchCommand());
+        scheduler.add(new StartArmCommand());
     }
 
     @Override

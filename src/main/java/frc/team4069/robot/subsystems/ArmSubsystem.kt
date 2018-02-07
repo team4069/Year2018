@@ -14,7 +14,7 @@ object ArmSubsystem : SubsystemBase() {
     init {
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0)
         talon.setSelectedSensorPosition(0, 0, 0)
-        talon.config_kF(0, 1.04936530324400564174894217207334273624823695345557122708039492242595204513399153737658674188998589562764456981664, 0)
+        talon.config_kF(0, 1.05, 0)
         talon.config_kP(0, 1.0, 0)
     }
 
@@ -28,7 +28,7 @@ object ArmSubsystem : SubsystemBase() {
     }
 
     enum class Position(val ticks: Int) {
-        MAX(2462),
+        MAX(1230),
         MIN(150)
     }
 }
