@@ -33,8 +33,14 @@ public class DriveToSwitchCommand extends CommandBase {
     private double getTurnFromGameData() {
         // Get the game data as a string
         String gameData = DriverStation.getInstance().getGameSpecificMessage();
-        // Check if the first character is left or right
-        boolean isRight = gameData.charAt(0) == 'R';
+        // Assume that the left switch is the one to go to
+        boolean isRight = false;
+        // If the length of the game data string is 3 as it should be
+        if (gameData.length() == 3) {
+            // Check if the first character is left or right
+            isRight = gameData.charAt(0) == 'R';
+        }
+
         // Assuming the switch is on the left, switch on the starting position and get the relevant
         // turning angle
         double turn = 0;
