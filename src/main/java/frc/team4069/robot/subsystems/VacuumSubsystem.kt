@@ -7,6 +7,10 @@ object VacuumSubsystem : SubsystemBase() {
 
     private val talon = TalonMotor(IOMapping.VACUUM_CAN_BUS, reversed = true)
 
+    fun reset() {
+        talon.stop()
+    }
+
     /**
      * Starts the vacuum motor
      */
