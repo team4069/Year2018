@@ -4,13 +4,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 import frc.team4069.robot.commands.CommandBase;
 
 // Drive from the starting position to the switch in autonomous mode
-class DriveToSwitch extends CommandBase {
+public class DriveToSwitchCommand extends CommandBase {
 
     // The robot's starting position for autonomous mode
     private StartingPosition startingPosition = StartingPosition.RIGHT;
 
     // Constructor, used to claim subsystems
-    DriveToSwitch() {
+    public DriveToSwitchCommand() {
         // Claim exclusive use of the drive base
         requires(driveBase);
     }
