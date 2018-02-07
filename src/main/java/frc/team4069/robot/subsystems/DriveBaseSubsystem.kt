@@ -85,8 +85,8 @@ object DriveBaseSubsystem : SubsystemBase() {
         val wheelSpeedDifference = speedPolynomial(Math.abs(speed)) * turn * speedSign
 
         return WheelSpeeds(
-                speed + wheelSpeedDifference,
-                speed - wheelSpeedDifference
+                leftDriveLpf.calculate(speed + wheelSpeedDifference),
+                rightDriveLpf.calculate(speed - wheelSpeedDifference)
         )
     }
 
