@@ -75,6 +75,8 @@ class OperatorDriveCommand extends CommandBase {
             // Set the speed of the robot
             driveBase.driveContinuousSpeed(turningCoefficient, speed);
         }
+
+        driveBase.getDistanceTraveledMeters();
     }
 
     // Called to check whether this command has completed

@@ -35,14 +35,16 @@ class TalonMotor private constructor(private val talon: TalonSRX, private val re
      */
     fun getDistanceTraveledRotations(): Double {
         val quadPosition = talon.sensorCollection.quadraturePosition.toDouble()
+        println(quadPosition)
         return quadPosition / ENCODER_TICKS_PER_ROTATION
     }
 
     constructor(deviceId: Int, reversed: Boolean = false, vararg slaves: Int) : this(TalonSRX(deviceId), reversed) {
 //        talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10)
+        talon.setSelectedSensorPosition(0, 0, 10);
         talon.config_kP(0, 1.0, 10)
 
-        for(slaveId in slaves) {
+        for (slaveId in slaves) {
             val slave = TalonMotor(slaveId, reversed)
             slave.follow(this)
             this.slaves.add(slave)

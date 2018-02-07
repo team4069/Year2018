@@ -26,7 +26,7 @@ public class DriveToSwitchCommand extends CommandBase {
         // Calculate the turn using the game data
         double turn = getTurnFromGameData();
         // Drive at three quarters of full speed using the calculated turn value
-        driveBase.driveContinuousSpeed(turn, 0.75);
+        driveBase.driveContinuousSpeed(turn, 0.25);
     }
 
     // Read the game data and get the direction to drive
@@ -46,15 +46,15 @@ public class DriveToSwitchCommand extends CommandBase {
         double turn = 0;
         switch (startingPosition) {
             case LEFT:
-                turn = -0.1;
+                turn = -0.05;
             case CENTER:
-                turn = 0.1;
+                turn = 0.05;
             case RIGHT:
-                turn = 0.3;
+                turn = 0.15;
         }
-        // If it is on the right, subtract 0.2 so that center is -0.1
+        // If it is on the right, subtract 0.1 so that center is -0.05
         if (isRight) {
-            turn -= 0.2;
+            turn -= 0.1;
         }
         // Return the modified turn value
         return turn;
@@ -63,7 +63,12 @@ public class DriveToSwitchCommand extends CommandBase {
     // Called to check if the command has completed
     protected boolean isFinished() {
         // Check if the drive base has gone 5 meters
-        return driveBase.getDistanceTraveledMeters() >= 5;
+        return driveBase.getDistanceTraveledMeters() >= 1;
+    }
+
+    // Used to stop the drive base when the command finishes
+    protected void end() {
+        driveBase.stop();
     }
 
     // An enum containing the possible starting positions of the robot
