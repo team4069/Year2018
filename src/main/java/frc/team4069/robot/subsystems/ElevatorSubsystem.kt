@@ -2,7 +2,6 @@ package frc.team4069.robot.subsystems
 
 import com.ctre.phoenix.motorcontrol.ControlMode
 import com.ctre.phoenix.motorcontrol.FeedbackDevice
-import edu.wpi.first.wpilibj.DigitalInput
 import frc.team4069.robot.io.IOMapping
 import frc.team4069.robot.motors.TalonMotor
 import java.util.concurrent.atomic.AtomicBoolean
@@ -22,7 +21,6 @@ object ElevatorSubsystem : SubsystemBase() {
     // Motor to control
     private val talon = TalonMotor(IOMapping.ELEVATOR_CAN_BUS)
     // Limit switch on the elevator
-    private val limitSwitch = DigitalInput(0)
     val locked = AtomicBoolean(false)
 
     init {

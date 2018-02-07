@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.IterativeRobot
 import edu.wpi.first.wpilibj.command.Scheduler
 import frc.team4069.robot.commands.CommandBase
 import frc.team4069.robot.commands.OperatorControlCommandGroup
-import frc.team4069.robot.commands.arm.StartArmCommand
+import frc.team4069.robot.commands.arm.RaiseArmCommand
 import frc.team4069.robot.io.Input
 import frc.team4069.robot.subsystems.ArmSubsystem
 import frc.team4069.robot.subsystems.ElevatorSubsystem
@@ -27,7 +27,7 @@ class Robot : IterativeRobot() {
     // Schedule autonomous actions
     override fun autonomousInit() {
         //TODO: Autonomous operations
-        scheduler.add(StartArmCommand())
+        scheduler.add(RaiseArmCommand())
     }
 
     // Schedule teleop command group
