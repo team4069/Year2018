@@ -2,6 +2,7 @@ package frc.team4069.robot.subsystems;
 
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonMotor;
+import frc.team4069.robot.util.LowPassFilter;
 
 // A class that manages all hardware components of the drive base and provides utility functions
 // for instructing it to drive and turn in a variety of ways
@@ -17,14 +18,20 @@ public class DriveBaseSubsystem extends SubsystemBase {
     private final double METERS_PER_ROTATION = 0.2;
 
     // Left and right drive motors
-    private TalonMotor leftDriveMotor;
-    private TalonMotor rightDriveMotor;
+    private TalonMotor leftDrive;
+    private TalonMotor rightDrive;
+
+    private LowPassFilter leftSideLpf;
+    private LowPassFilter rightSideLpf;
 
     // Initialize the drive motors
     private DriveBaseSubsystem() {
         // Initialize the motors with predefined port numbers
-        leftDriveMotor = new TalonMotor(IOMapping.LEFT_DRIVE_CAN_BUS, false);
-        rightDriveMotor = new TalonMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, false);
+        leftDrive = new TalonMotor(IOMapping.LEFT_DRIVE_CAN_BUS, false, 11, 13);
+        rightDrive = new TalonMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, false, 18, 20);
+
+        leftSideLpf = new LowPassFilter();
+        rightSideLpf = new LowPassFilter();
     }
 
     // A public getter for the instance
@@ -41,9 +48,9 @@ public class DriveBaseSubsystem extends SubsystemBase {
     public double getDistanceTraveledMeters() {
         // Get the absolute values of the positions of each of the motors and calculate the average
         double leftWheelRotationsTraveled =
-                Math.abs(leftDriveMotor.getDistanceTraveledRotations());
+                Math.abs(leftDrive.getDistanceTraveledRotations());
         double rightWheelRotationsTraveled =
-                Math.abs(rightDriveMotor.getDistanceTraveledRotations());
+                Math.abs(rightDrive.getDistanceTraveledRotations());
         double averageRotationsTraveled =
                 (leftWheelRotationsTraveled + rightWheelRotationsTraveled) / 2;
         // Multiply the average rotations by the number of wheels per rotation to get the average
@@ -54,18 +61,27 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // Stop moving immediately
     public void stop() {
         // Set the motor speeds to zero
-        leftDriveMotor.stop();
-        rightDriveMotor.stop();
+        leftDrive.stop();
+        rightDrive.stop();
+    }
+
+    public void quickTurn(double turn) {
+        WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn, 0);
+        leftDrive.setConstantSpeed(leftSideLpf.calculate(wheelSpeeds.leftWheelSpeed));
+        rightDrive.setConstantSpeed(rightSideLpf.calculate(wheelSpeeds.rightWheelSpeed));
     }
 
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed) {
         // Use the cheesy drive algorithm to calculate the necessary speeds
-        WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn, speed);
+        if(speed < 0) {
+            turn = -turn;
+        }
+        WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
 
         // Set the motor speeds with the calculated values
-        leftDriveMotor.setConstantSpeed(wheelSpeeds.leftWheelSpeed);
-        rightDriveMotor.setConstantSpeed(wheelSpeeds.rightWheelSpeed);
+        leftDrive.setConstantSpeed(leftSideLpf.calculate(wheelSpeeds.leftWheelSpeed));
+        rightDrive.setConstantSpeed(rightSideLpf.calculate(wheelSpeeds.rightWheelSpeed));
     }
 
     // A function that takes a turning coefficient from -1 to 1 and a speed and calculates the
@@ -76,7 +92,11 @@ public class DriveBaseSubsystem extends SubsystemBase {
         if (speed == 0) {
             // Simply use the turn coefficient and its negative for the wheel speeds, since it is
             // within the range of -1 and 1, and a sharper turn will result in faster rotation
-            return new WheelSpeeds(turn, -turn);
+            if(turn == 0) {
+                return new WheelSpeeds(0, 0);
+            } else {
+                return new WheelSpeeds(turn, -turn);
+            }
         }
         // Otherwise, we will use the standard algorithm
         else {
@@ -89,6 +109,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
             // Use the absolute value in the polynomial calculation
             // and multiply the result by the sign
             double wheelSpeedDifference = speedPolynomial(Math.abs(speed)) * turn * speedSign;
+            //TODO: Get that constant into smart dashboard
             // Add this difference to the overall speed to get the left wheel speed and subtract it
             // from the overall speed to get the right wheel speed
             return new WheelSpeeds(

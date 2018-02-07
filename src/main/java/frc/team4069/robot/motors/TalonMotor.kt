@@ -1,7 +1,6 @@
 package frc.team4069.robot.motors
 
 import com.ctre.phoenix.motorcontrol.ControlMode
-import com.ctre.phoenix.motorcontrol.FeedbackDevice
 import com.ctre.phoenix.motorcontrol.IMotorControllerEnhanced
 import com.ctre.phoenix.motorcontrol.can.TalonSRX
 
@@ -40,7 +39,7 @@ class TalonMotor private constructor(private val talon: TalonSRX, private val re
     }
 
     constructor(deviceId: Int, reversed: Boolean = false, vararg slaves: Int) : this(TalonSRX(deviceId), reversed) {
-        talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10)
+//        talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10)
         talon.config_kP(0, 1.0, 10)
 
         for(slaveId in slaves) {

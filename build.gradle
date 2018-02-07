@@ -39,6 +39,7 @@ deploy {
 // Central is required to fetch Kotlin
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 // Defining my dependencies. In this case, WPILib (+ friends), CTRE Toolsuite (Talon SRX)
@@ -48,7 +49,10 @@ dependencies {
     compile ctre()
     compile navx()
 
+    compile openrio.powerup.matchData()
+
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.1"
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

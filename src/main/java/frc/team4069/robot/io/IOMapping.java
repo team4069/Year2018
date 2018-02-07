@@ -4,11 +4,13 @@ package frc.team4069.robot.io;
 public class IOMapping {
 
     // CAN bus port for the climber hook motor
-    public static final int ELEVATOR_CAN_BUS = 6;
-    public static final int VACUUM_CAN_BUS = 4;
+    public static final int ELEVATOR_CAN_BUS = 16;
+    public static final int VACUUM_CAN_BUS = 21;
+    public static final int WINCH_CAN_BUS = 10;
+    public static final int ARM_CAN_BUS = 24;
     // CAN bus ports for the drive motors
-    public static final int LEFT_DRIVE_CAN_BUS = 1;
-    public static final int RIGHT_DRIVE_CAN_BUS = 2;
+    public static final int LEFT_DRIVE_CAN_BUS = 12;
+    public static final int RIGHT_DRIVE_CAN_BUS = 19;
 
     // The port number of the joystick
     static final int JOYSTICK_NUMBER = 0;
