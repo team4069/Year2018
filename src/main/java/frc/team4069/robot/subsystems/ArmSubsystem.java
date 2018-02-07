@@ -1,12 +1,12 @@
 package frc.team4069.robot.subsystems
 
-import com.ctre.phoenix.motorcontrol.ControlMode
-import com.ctre.phoenix.motorcontrol.FeedbackDevice
-import frc.team4069.robot.io.IOMapping
-import frc.team4069.robot.motors.TalonMotor
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import frc.team4069.robot.io.IOMapping;
+import frc.team4069.robot.motors.TalonMotor;
 
-object ArmSubsystem : SubsystemBase() {
-    val talon = TalonMotor(IOMapping.ARM_CAN_BUS)
+public class ArmSubsystem extends SubsystemBase {
+    TalonMotor talon = new TalonMotor(IOMapping.ARM_CAN_BUS);
 
     val position: Int
         get() = talon.getSelectedSensorPosition(0)
@@ -18,16 +18,16 @@ object ArmSubsystem : SubsystemBase() {
         talon.config_kP(0, 1.0, 0)
     }
 
-    fun rotateTo(pos: Position) {
+    public void rotateTo(pos Position) {
         talon.set(ControlMode.MotionMagic, pos.ticks.toDouble())
     }
 
-    fun reset() {
+    public void reset() {
         talon.stop()
         talon.setSelectedSensorPosition(0, 0, 0)
     }
 
-    enum class Position(val ticks: Int) {
+    public enum class Position(int ticks) {
         MAX(2462),
         MIN(150)
     }
