@@ -8,7 +8,7 @@ import frc.team4069.robot.motors.TalonMotor
 import java.util.concurrent.atomic.AtomicBoolean
 
 // Subsystem for controlling the cube elevator
-object ElevatorSubsystem : SubsystemBase() {
+object ElevatorSubsystemOld : SubsystemBase() {
 
     // The maximum number of ticks that the elevator motor can safely reach
     const val MAX_POSITION_TICKS = -26901

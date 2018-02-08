@@ -1,7 +1,7 @@
 package frc.team4069.robot.subsystems;
 
 import frc.team4069.robot.io.IOMapping;
-import frc.team4069.robot.motors.TalonMotor;
+import frc.team4069.robot.motors.TalonSRXMotor;
 import frc.team4069.robot.util.LowPassFilter;
 
 // A class that manages all hardware components of the drive base and provides utility functions
@@ -18,8 +18,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
     private final double METERS_PER_ROTATION = 0.2;
 
     // Left and right drive motors
-    private TalonMotor leftDrive;
-    private TalonMotor rightDrive;
+    private TalonSRXMotor leftDrive;
+    private TalonSRXMotor rightDrive;
 
     private LowPassFilter leftSideLpf;
     private LowPassFilter rightSideLpf;
@@ -27,8 +27,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // Initialize the drive motors
     private DriveBaseSubsystem() {
         // Initialize the motors with predefined port numbers
-        leftDrive = new TalonMotor(IOMapping.LEFT_DRIVE_CAN_BUS, false, 11, 13);
-        rightDrive = new TalonMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, false, 18, 20);
+        leftDrive = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, 11, 13);
+        rightDrive = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, 18, 20);
 
         leftSideLpf = new LowPassFilter();
         rightSideLpf = new LowPassFilter();
@@ -109,7 +109,6 @@ public class DriveBaseSubsystem extends SubsystemBase {
             // Use the absolute value in the polynomial calculation
             // and multiply the result by the sign
             double wheelSpeedDifference = speedPolynomial(Math.abs(speed)) * turn * speedSign;
-            //TODO: Get that constant into smart dashboard
             // Add this difference to the overall speed to get the left wheel speed and subtract it
             // from the overall speed to get the right wheel speed
             return new WheelSpeeds(
