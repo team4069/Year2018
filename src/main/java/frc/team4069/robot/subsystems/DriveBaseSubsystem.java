@@ -14,8 +14,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // A singleton instance of the drive base subsystem
     private static DriveBaseSubsystem instance;
 
-    // The number of meters each wheel travels per rotation
-    private final double METERS_PER_ROTATION = 0.2;
+    // The number of meters each wheel travels per motor rotation
+    private final double METERS_PER_ROTATION = 0.244;
 
     // Left and right drive motors
     private TalonSRXMotor leftDrive;
@@ -74,7 +74,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed) {
         // Use the cheesy drive algorithm to calculate the necessary speeds
-        if(speed < 0) {
+        if (speed < 0) {
             turn = -turn;
         }
         WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
@@ -92,7 +92,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
         if (speed == 0) {
             // Simply use the turn coefficient and its negative for the wheel speeds, since it is
             // within the range of -1 and 1, and a sharper turn will result in faster rotation
-            if(turn == 0) {
+            if (turn == 0) {
                 return new WheelSpeeds(0, 0);
             } else {
                 return new WheelSpeeds(turn, -turn);
